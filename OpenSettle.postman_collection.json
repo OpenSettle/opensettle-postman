@@ -1,0 +1,247 @@
+{
+  "info": {
+    "name": "OpenSettle API",
+    "description": "Hand-curated collection covering the OpenSettle v1 API. Spec source of truth: https://api.opensettle.io/v1/openapi.json",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "00000000-0000-0000-0000-000000000002"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{apiKey}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Me",
+      "item": [
+        {
+          "name": "Get current session",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/me",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "List customers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/customers",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "customers"]
+            }
+          }
+        },
+        {
+          "name": "Create customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ada@example.com\",\n  \"name\": \"Ada Lovelace\"\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/customers",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "customers"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Invoices",
+      "item": [
+        {
+          "name": "Create invoice",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"cus_…\",\n  \"amountMinor\": 19900,\n  \"currency\": \"USD\",\n  \"chain\": \"base\",\n  \"token\": \"USDC\",\n  \"lineItems\": [\n    { \"description\": \"Pro plan\", \"quantity\": 1, \"unitAmountMinor\": 19900 }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/invoices",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "invoices"]
+            }
+          }
+        },
+        {
+          "name": "Send invoice",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/invoices/{{invoiceId}}/send",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "invoices", "{{invoiceId}}", "send"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Checkouts",
+      "item": [
+        {
+          "name": "Create checkout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mode\": \"payment\",\n  \"customerId\": \"cus_…\",\n  \"invoiceId\": \"inv_…\",\n  \"successUrl\": \"https://yourapp.com/done\",\n  \"cancelUrl\": \"https://yourapp.com/pricing\"\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/checkouts",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "checkouts"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Subscriptions",
+      "item": [
+        {
+          "name": "Create subscription",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"cus_…\",\n  \"priceId\": \"price_…\",\n  \"chain\": \"base\",\n  \"token\": \"USDC\",\n  \"autopay\": \"invoice\"\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/subscriptions",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "subscriptions"]
+            }
+          }
+        },
+        {
+          "name": "Cancel subscription",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/subscriptions/{{subscriptionId}}/cancel",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "subscriptions", "{{subscriptionId}}", "cancel"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "List payments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/payments",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "payments"]
+            }
+          }
+        },
+        {
+          "name": "Refund payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amountMinor\": 19900\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/payments/{{paymentId}}/refund",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "payments", "{{paymentId}}", "refund"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Webhook Endpoints",
+      "item": [
+        {
+          "name": "Create webhook endpoint",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"https://yourapp.com/webhook\",\n  \"events\": [\"payment.confirmed\", \"subscription.renewed\", \"invoice.paid\"]\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/webhook_endpoints",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "webhook_endpoints"]
+            }
+          }
+        },
+        {
+          "name": "Rotate signing secret",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/webhook_endpoints/{{endpointId}}/rotate",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "webhook_endpoints", "{{endpointId}}", "rotate"]
+            }
+          }
+        },
+        {
+          "name": "Test webhook delivery",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/webhook_endpoints/{{endpointId}}/test",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "webhook_endpoints", "{{endpointId}}", "test"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
