@@ -1,20 +1,28 @@
 {
   "info": {
     "name": "OpenSettle API",
-    "description": "Hand-curated collection covering the OpenSettle v1 API. Spec source of truth: https://api.opensettle.io/v1/openapi.json",
+    "description": "Hand-curated collection covering the OpenSettle v1 public API.\n\nSpec source of truth: https://api.opensettle.io/v1/openapi.json\n\nUsage:\n1. Import this collection + `OpenSettle.postman_environment.json`.\n2. Fill in `apiOrigin`, `apiKey`, `workspaceId` in the environment.\n3. As you create resources, copy the IDs into the matching environment\n   variables (`customerId`, `invoiceId`, `priceId`, etc).\n\nEvery mutating request includes `Idempotency-Key: {{$guid}}` — Postman\ngenerates a fresh UUID per send, so retries from the UI are safe.\n",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_postman_id": "00000000-0000-0000-0000-000000000002"
   },
   "auth": {
     "type": "bearer",
     "bearer": [
-      {
-        "key": "token",
-        "value": "{{apiKey}}",
-        "type": "string"
-      }
+      { "key": "token", "value": "{{apiKey}}", "type": "string" }
     ]
   },
+  "variable": [
+    { "key": "customerId", "value": "" },
+    { "key": "invoiceId", "value": "" },
+    { "key": "checkoutId", "value": "" },
+    { "key": "subscriptionId", "value": "" },
+    { "key": "productId", "value": "" },
+    { "key": "priceId", "value": "" },
+    { "key": "paymentId", "value": "" },
+    { "key": "walletId", "value": "" },
+    { "key": "endpointId", "value": "" },
+    { "key": "deliveryId", "value": "" }
+  ],
   "item": [
     {
       "name": "Me",
@@ -28,7 +36,8 @@
               "raw": "{{apiOrigin}}/v1/me",
               "host": ["{{apiOrigin}}"],
               "path": ["v1", "me"]
-            }
+            },
+            "description": "Returns the authenticated session/key context. Use as a sanity check that `apiKey` is set correctly."
           }
         }
       ]
@@ -53,7 +62,8 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
             ],
             "body": {
               "mode": "raw",
@@ -65,6 +75,166 @@
               "path": ["v1", "workspaces", "{{workspaceId}}", "customers"]
             }
           }
+        },
+        {
+          "name": "Get customer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/customers/{{customerId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "customers", "{{customerId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update customer",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ada Byron\"\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/customers/{{customerId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "customers", "{{customerId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete customer",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/customers/{{customerId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "customers", "{{customerId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/products",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "products"]
+            }
+          }
+        },
+        {
+          "name": "Create product",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pro plan\",\n  \"description\": \"Standard tier\"\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/products",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "products"]
+            }
+          }
+        },
+        {
+          "name": "Get product",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/products/{{productId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "products", "{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update product",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pro plan (annual)\"\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/products/{{productId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "products", "{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "List prices on product",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/products/{{productId}}/prices",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "products", "{{productId}}", "prices"]
+            }
+          }
+        },
+        {
+          "name": "Create price on product",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"unitAmountMinor\": 1900,\n  \"currency\": \"USD\",\n  \"recurring\": { \"interval\": \"month\", \"intervalCount\": 1 }\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/products/{{productId}}/prices",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "products", "{{productId}}", "prices"]
+            }
+          }
+        },
+        {
+          "name": "Update price",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"active\": false\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/prices/{{priceId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "prices", "{{priceId}}"]
+            }
+          }
         }
       ]
     },
@@ -72,20 +242,47 @@
       "name": "Invoices",
       "item": [
         {
+          "name": "List invoices",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/invoices",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "invoices"]
+            },
+            "description": "Add `?format=csv` for a CSV export."
+          }
+        },
+        {
           "name": "Create invoice",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"customerId\": \"cus_…\",\n  \"amountMinor\": 19900,\n  \"currency\": \"USD\",\n  \"chain\": \"base\",\n  \"token\": \"USDC\",\n  \"lineItems\": [\n    { \"description\": \"Pro plan\", \"quantity\": 1, \"unitAmountMinor\": 19900 }\n  ]\n}"
+              "raw": "{\n  \"customerId\": \"{{customerId}}\",\n  \"chain\": \"base\",\n  \"token\": \"USDC\",\n  \"lineItems\": [\n    {\n      \"description\": \"Pro plan – 1 month\",\n      \"quantity\": 1,\n      \"unitAmountMinor\": 19900\n    }\n  ],\n  \"dueInDays\": 14,\n  \"memo\": \"Thanks for your business\",\n  \"metadata\": { \"orderId\": \"ord_123\" }\n}"
             },
             "url": {
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/invoices",
               "host": ["{{apiOrigin}}"],
               "path": ["v1", "workspaces", "{{workspaceId}}", "invoices"]
+            },
+            "description": "Required fields: customerId, chain, token, lineItems[]. `currency` defaults to USD; `dueInDays` defaults to 14. Top-level `amountMinor` is NOT a field — totals are derived from `lineItems[].unitAmountMinor * quantity`."
+          }
+        },
+        {
+          "name": "Get invoice",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/invoices/{{invoiceId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "invoices", "{{invoiceId}}"]
             }
           }
         },
@@ -100,6 +297,30 @@
               "path": ["v1", "workspaces", "{{workspaceId}}", "invoices", "{{invoiceId}}", "send"]
             }
           }
+        },
+        {
+          "name": "Send invoice reminder",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/invoices/{{invoiceId}}/reminder",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "invoices", "{{invoiceId}}", "reminder"]
+            }
+          }
+        },
+        {
+          "name": "Void invoice",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/invoices/{{invoiceId}}/void",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "invoices", "{{invoiceId}}", "void"]
+            }
+          }
         }
       ]
     },
@@ -107,20 +328,53 @@
       "name": "Checkouts",
       "item": [
         {
-          "name": "Create checkout",
+          "name": "Create checkout (one-off payment)",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"mode\": \"payment\",\n  \"customerId\": \"cus_…\",\n  \"invoiceId\": \"inv_…\",\n  \"successUrl\": \"https://yourapp.com/done\",\n  \"cancelUrl\": \"https://yourapp.com/pricing\"\n}"
+              "raw": "{\n  \"mode\": \"payment\",\n  \"customerId\": \"{{customerId}}\",\n  \"invoiceId\": \"{{invoiceId}}\",\n  \"successUrl\": \"https://yourapp.com/payments/success\",\n  \"cancelUrl\": \"https://yourapp.com/payments/cancel\"\n}"
             },
             "url": {
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/checkouts",
               "host": ["{{apiOrigin}}"],
               "path": ["v1", "workspaces", "{{workspaceId}}", "checkouts"]
+            }
+          }
+        },
+        {
+          "name": "Create checkout (subscription)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mode\": \"subscription\",\n  \"customerEmail\": \"buyer@example.com\",\n  \"priceId\": \"{{priceId}}\",\n  \"chain\": \"base\",\n  \"token\": \"USDC\",\n  \"successUrl\": \"https://yourapp.com/billing?checkout=success\",\n  \"cancelUrl\": \"https://yourapp.com/billing?checkout=cancel\",\n  \"metadata\": { \"userId\": \"usr_123\", \"planId\": \"pro\" }\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/checkouts",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "checkouts"]
+            },
+            "description": "Subscription mode requires both `chain` and `token`. Pass `customerEmail` to find-or-create the customer, or `customerId` to reference an existing one. Metadata is propagated to the subscription record and included in lifecycle webhook events."
+          }
+        },
+        {
+          "name": "Get checkout",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/checkouts/{{checkoutId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "checkouts", "{{checkoutId}}"]
             }
           }
         }
@@ -130,16 +384,10 @@
       "name": "Subscriptions",
       "item": [
         {
-          "name": "Create subscription",
+          "name": "List subscriptions",
           "request": {
-            "method": "POST",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"customerId\": \"cus_…\",\n  \"priceId\": \"price_…\",\n  \"chain\": \"base\",\n  \"token\": \"USDC\",\n  \"autopay\": \"invoice\"\n}"
-            },
+            "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/subscriptions",
               "host": ["{{apiOrigin}}"],
@@ -148,14 +396,213 @@
           }
         },
         {
+          "name": "Create subscription",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"{{customerId}}\",\n  \"priceId\": \"{{priceId}}\",\n  \"chain\": \"base\",\n  \"token\": \"USDC\",\n  \"autopay\": \"manual\",\n  \"trialDays\": 0\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/subscriptions",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "subscriptions"]
+            },
+            "description": "`autopay` defaults to \"manual\" — the customer is invoiced and pays each cycle. Use the Checkouts → subscription flow if you want a hosted-checkout signup instead."
+          }
+        },
+        {
+          "name": "Get subscription",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/subscriptions/{{subscriptionId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "subscriptions", "{{subscriptionId}}"]
+            }
+          }
+        },
+        {
+          "name": "Pause subscription",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/subscriptions/{{subscriptionId}}/pause",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "subscriptions", "{{subscriptionId}}", "pause"]
+            }
+          }
+        },
+        {
+          "name": "Resume subscription",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/subscriptions/{{subscriptionId}}/resume",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "subscriptions", "{{subscriptionId}}", "resume"]
+            }
+          }
+        },
+        {
+          "name": "Change plan",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"priceId\": \"{{priceId}}\",\n  \"prorationMode\": \"at_period_end\"\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/subscriptions/{{subscriptionId}}/change_plan",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "subscriptions", "{{subscriptionId}}", "change_plan"]
+            }
+          }
+        },
+        {
           "name": "Cancel subscription",
           "request": {
             "method": "POST",
-            "header": [],
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"customer requested\",\n  \"atPeriodEnd\": false\n}"
+            },
             "url": {
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/subscriptions/{{subscriptionId}}/cancel",
               "host": ["{{apiOrigin}}"],
               "path": ["v1", "workspaces", "{{workspaceId}}", "subscriptions", "{{subscriptionId}}", "cancel"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Wallets",
+      "item": [
+        {
+          "name": "List wallets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/wallets",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "wallets"]
+            }
+          }
+        },
+        {
+          "name": "Create wallet (initiate verification)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chain\": \"base\",\n  \"address\": \"0x0000000000000000000000000000000000000000\",\n  \"label\": \"Treasury — Base\"\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/wallets",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "wallets"]
+            },
+            "description": "This requires a fresh-auth session (passkey or login within 5 min). API keys cannot mutate wallets — this endpoint is dashboard-only."
+          }
+        },
+        {
+          "name": "Issue ownership challenge",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/wallets/{{walletId}}/challenge",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "wallets", "{{walletId}}", "challenge"]
+            }
+          }
+        },
+        {
+          "name": "Verify ownership signature (EIP-191)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"signature\": \"0x…\"\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/wallets/{{walletId}}/verify",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "wallets", "{{walletId}}", "verify"]
+            }
+          }
+        },
+        {
+          "name": "Get wallet",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/wallets/{{walletId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "wallets", "{{walletId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update wallet (set default)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isDefault\": true\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/wallets/{{walletId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "wallets", "{{walletId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete wallet",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/wallets/{{walletId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "wallets", "{{walletId}}"]
             }
           }
         }
@@ -177,21 +624,54 @@
           }
         },
         {
-          "name": "Refund payment",
+          "name": "Get payment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/payments/{{paymentId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "payments", "{{paymentId}}"]
+            }
+          }
+        },
+        {
+          "name": "Initiate refund",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"amountMinor\": 19900\n}"
+              "raw": "{\n  \"amountMinor\": 19900,\n  \"reason\": \"customer requested\"\n}"
             },
             "url": {
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/payments/{{paymentId}}/refund",
               "host": ["{{apiOrigin}}"],
               "path": ["v1", "workspaces", "{{workspaceId}}", "payments", "{{paymentId}}", "refund"]
             }
+          }
+        },
+        {
+          "name": "Record refund broadcast (on-chain tx)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"txHash\": \"0x…\"\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/payments/{{paymentId}}/refund/broadcast",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "payments", "{{paymentId}}", "refund", "broadcast"]
+            },
+            "description": "Used after a manual on-chain refund to register the tx hash with OpenSettle. The refund-observer worker will confirm it and emit `payment.refunded`."
           }
         }
       ]
@@ -200,16 +680,10 @@
       "name": "Webhook Endpoints",
       "item": [
         {
-          "name": "Create webhook endpoint",
+          "name": "List webhook endpoints",
           "request": {
-            "method": "POST",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"url\": \"https://yourapp.com/webhook\",\n  \"events\": [\"payment.confirmed\", \"subscription.renewed\", \"invoice.paid\"]\n}"
-            },
+            "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/webhook_endpoints",
               "host": ["{{apiOrigin}}"],
@@ -218,26 +692,149 @@
           }
         },
         {
-          "name": "Rotate signing secret",
+          "name": "Create webhook endpoint",
           "request": {
             "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"https://yourapp.com/webhooks/opensettle\",\n  \"events\": [\n    \"payment.confirmed\",\n    \"payment.failed\",\n    \"payment.refunded\",\n    \"subscription.created\",\n    \"subscription.trial_ended\",\n    \"subscription.renewed\",\n    \"subscription.past_due\",\n    \"subscription.canceled\",\n    \"invoice.paid\",\n    \"invoice.past_due\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/webhook_endpoints",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "webhook_endpoints"]
+            },
+            "description": "The signing secret is returned ONCE in the response — copy it immediately. If lost, use the rotate endpoint below or delete + recreate."
+          }
+        },
+        {
+          "name": "Get webhook endpoint",
+          "request": {
+            "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/webhook_endpoints/{{endpointId}}/rotate",
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/webhook_endpoints/{{endpointId}}",
               "host": ["{{apiOrigin}}"],
-              "path": ["v1", "workspaces", "{{workspaceId}}", "webhook_endpoints", "{{endpointId}}", "rotate"]
+              "path": ["v1", "workspaces", "{{workspaceId}}", "webhook_endpoints", "{{endpointId}}"]
             }
           }
         },
         {
-          "name": "Test webhook delivery",
+          "name": "Update webhook endpoint",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"events\": [\"payment.confirmed\", \"payment.refunded\"],\n  \"enabled\": true\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/webhook_endpoints/{{endpointId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "webhook_endpoints", "{{endpointId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete webhook endpoint",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/webhook_endpoints/{{endpointId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "webhook_endpoints", "{{endpointId}}"]
+            }
+          }
+        },
+        {
+          "name": "Rotate signing secret",
           "request": {
             "method": "POST",
-            "header": [],
+            "header": [
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/webhook_endpoints/{{endpointId}}/rotate",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "webhook_endpoints", "{{endpointId}}", "rotate"]
+            },
+            "description": "Returns a new signing secret. The previous one is invalidated immediately — make sure your handler accepts both during the rotation window."
+          }
+        },
+        {
+          "name": "Send test delivery",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
             "url": {
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/webhook_endpoints/{{endpointId}}/test",
               "host": ["{{apiOrigin}}"],
               "path": ["v1", "workspaces", "{{workspaceId}}", "webhook_endpoints", "{{endpointId}}", "test"]
+            }
+          }
+        },
+        {
+          "name": "List webhook deliveries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/webhook_endpoints/{{endpointId}}/deliveries",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "webhook_endpoints", "{{endpointId}}", "deliveries"]
+            }
+          }
+        },
+        {
+          "name": "Replay webhook delivery",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/webhook_endpoints/{{endpointId}}/deliveries/{{deliveryId}}/replay",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "webhook_endpoints", "{{endpointId}}", "deliveries", "{{deliveryId}}", "replay"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Liveness",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/healthz",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "healthz"]
+            }
+          }
+        },
+        {
+          "name": "Readiness (DB check)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/readyz",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "readyz"]
             }
           }
         }

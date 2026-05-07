@@ -7,11 +7,17 @@ writing any code.
 ## What's in this repo
 
 - `OpenSettle.postman_collection.json` — collection covering every public
-  v1 endpoint, organized by resource (Customers, Products, Invoices,
-  Checkouts, Subscriptions, Payments, Webhook Endpoints).
+  v1 endpoint, organized by resource (Me, Customers, Products,
+  Invoices, Checkouts, Subscriptions, Wallets, Payments, Webhook
+  Endpoints, Health). 50+ requests total.
 - `OpenSettle.postman_environment.json` — environment template with the
   variables you need: `apiKey`, `workspaceId`, `apiOrigin`. Fill them in
   for your workspace, save under a different name, and you're ready.
+
+Every mutating request has `Idempotency-Key: {{$guid}}` set — Postman
+substitutes a fresh UUID per send, so retries from the runner are safe.
+The collection-level Bearer auth uses the `apiKey` variable, so you only
+set the key once.
 
 ## Quickstart (under 2 minutes)
 
@@ -22,7 +28,12 @@ writing any code.
    - `apiKey` = your `sk_test_…` key from the dashboard's Developers tab
    - `workspaceId` = your workspace ID (begins with `ws_`)
 4. **Run any request**. Start with `GET {{apiOrigin}}/v1/me` — verifies
-   auth and returns the workspace shape.
+   auth and returns the session/key context.
+
+As you create resources, copy the IDs into the matching collection
+variables (`customerId`, `invoiceId`, `priceId`, `subscriptionId`,
+`walletId`, `endpointId`, etc.) — every "Get / Update / Delete" request
+references them.
 
 ## Live spec
 
