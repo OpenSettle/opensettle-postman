@@ -208,7 +208,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"unitAmountMinor\": 1900,\n  \"currency\": \"USD\",\n  \"recurring\": { \"interval\": \"month\", \"intervalCount\": 1 }\n}"
+              "raw": "{\n  \"amount\": 1900,\n  \"currency\": \"USD\",\n  \"interval\": \"month\"\n}"
             },
             "url": {
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/products/{{productId}}/prices",
@@ -363,7 +363,7 @@
               "host": ["{{apiOrigin}}"],
               "path": ["v1", "workspaces", "{{workspaceId}}", "checkouts"]
             },
-            "description": "Subscription mode requires both `chain` and `token`. Pass `customerEmail` to find-or-create the customer, or `customerId` to reference an existing one. Metadata is propagated to the subscription record and included in lifecycle webhook events."
+            "description": "Subscription mode requires `priceId`. `chain` and `token` are optional overrides; if omitted they're inherited from the price. Pass `customerEmail` to find-or-create the customer, or `customerId` to reference an existing one. Metadata is propagated to the subscription record and included in lifecycle webhook events."
           }
         },
         {
@@ -484,7 +484,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"reason\": \"customer requested\",\n  \"atPeriodEnd\": false\n}"
+              "raw": "{\n  \"reason\": \"customer requested\",\n  \"mode\": \"immediately\"\n}"
             },
             "url": {
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/subscriptions/{{subscriptionId}}/cancel",
@@ -520,7 +520,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"chain\": \"base\",\n  \"address\": \"0x0000000000000000000000000000000000000000\",\n  \"label\": \"Treasury — Base\"\n}"
+              "raw": "{\n  \"chain\": \"base\",\n  \"token\": \"USDC\",\n  \"address\": \"0x0000000000000000000000000000000000000000\",\n  \"nickname\": \"Treasury — Base\"\n}"
             },
             "url": {
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/wallets",
@@ -554,7 +554,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"signature\": \"0x…\"\n}"
+              "raw": "{\n  \"challengeId\": \"chl_…\",\n  \"signature\": \"0x…\"\n}"
             },
             "url": {
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/wallets/{{walletId}}/verify",
@@ -664,7 +664,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"txHash\": \"0x…\"\n}"
+              "raw": "{\n  \"refundTxHash\": \"0x…\"\n}"
             },
             "url": {
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/payments/{{paymentId}}/refund/broadcast",
@@ -733,7 +733,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"events\": [\"payment.confirmed\", \"payment.refunded\"],\n  \"enabled\": true\n}"
+              "raw": "{\n  \"events\": [\"payment.confirmed\", \"payment.refunded\"],\n  \"status\": \"enabled\"\n}"
             },
             "url": {
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/webhook_endpoints/{{endpointId}}",
@@ -766,7 +766,7 @@
               "host": ["{{apiOrigin}}"],
               "path": ["v1", "workspaces", "{{workspaceId}}", "webhook_endpoints", "{{endpointId}}", "rotate"]
             },
-            "description": "Returns a new signing secret. The previous one is invalidated immediately — make sure your handler accepts both during the rotation window."
+            "description": "Returns a new signing secret. The previous one is invalidated immediately — make sure your handler accepts both during the rotation window. Requires a fresh-auth session (passkey or login within the last 5 minutes); API keys cannot rotate."
           }
         },
         {
