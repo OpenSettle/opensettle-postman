@@ -37,7 +37,7 @@
               "host": ["{{apiOrigin}}"],
               "path": ["v1", "me"]
             },
-            "description": "Returns the authenticated session/key context. Use as a sanity check that `apiKey` is set correctly."
+            "description": "GET /v1/me requires an interactive dashboard session cookie (browser login), NOT an API key — it returns 401 with the Bearer API key this collection uses. To verify your API key, call List customers instead."
           }
         }
       ]
@@ -507,7 +507,8 @@
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/wallets",
               "host": ["{{apiOrigin}}"],
               "path": ["v1", "workspaces", "{{workspaceId}}", "wallets"]
-            }
+            },
+            "description": "All /wallets endpoints require a dashboard session (not an API key)."
           }
         },
         {
@@ -572,7 +573,8 @@
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/wallets/{{walletId}}",
               "host": ["{{apiOrigin}}"],
               "path": ["v1", "workspaces", "{{workspaceId}}", "wallets", "{{walletId}}"]
-            }
+            },
+            "description": "All /wallets endpoints require a dashboard session (not an API key)."
           }
         },
         {
@@ -651,7 +653,8 @@
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/payments/{{paymentId}}/refund",
               "host": ["{{apiOrigin}}"],
               "path": ["v1", "workspaces", "{{workspaceId}}", "payments", "{{paymentId}}", "refund"]
-            }
+            },
+            "description": "Refunds require a fresh interactive dashboard session (step-up auth); an API key returns aal_required."
           }
         },
         {
@@ -671,7 +674,7 @@
               "host": ["{{apiOrigin}}"],
               "path": ["v1", "workspaces", "{{workspaceId}}", "payments", "{{paymentId}}", "refund", "broadcast"]
             },
-            "description": "Used after a manual on-chain refund to register the tx hash with OpenSettle. The refund-observer worker will confirm it and emit `payment.refunded`."
+            "description": "Used after a manual on-chain refund to register the tx hash with OpenSettle. The refund-observer worker will confirm it and emit `payment.refunded`. Refunds require a fresh interactive dashboard session (step-up auth); an API key returns aal_required."
           }
         }
       ]

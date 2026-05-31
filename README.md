@@ -27,8 +27,9 @@ set the key once.
    - `apiOrigin` = `https://api.opensettle.io`
    - `apiKey` = your `sk_test_…` key from the dashboard's Developers tab
    - `workspaceId` = your workspace ID (begins with `ws_`)
-4. **Run any request**. Start with `GET {{apiOrigin}}/v1/me` — verifies
-   auth and returns the session/key context.
+4. **Run any request**. Start with `GET {{apiOrigin}}/v1/workspaces/{{workspaceId}}/customers` —
+   a 200 confirms your `apiKey` and `workspaceId` are correct. (Note:
+   `GET /v1/me` is dashboard-session only and will 401 with an API key.)
 
 As you create resources, copy the IDs into the matching collection
 variables (`customerId`, `invoiceId`, `priceId`, `subscriptionId`,
