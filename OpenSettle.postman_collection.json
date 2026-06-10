@@ -15,6 +15,7 @@
     { "key": "customerId", "value": "" },
     { "key": "invoiceId", "value": "" },
     { "key": "checkoutId", "value": "" },
+    { "key": "paymentLinkId", "value": "" },
     { "key": "subscriptionId", "value": "" },
     { "key": "productId", "value": "" },
     { "key": "priceId", "value": "" },
@@ -375,6 +376,55 @@
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/checkouts/{{checkoutId}}",
               "host": ["{{apiOrigin}}"],
               "path": ["v1", "workspaces", "{{workspaceId}}", "checkouts", "{{checkoutId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payment Links",
+      "item": [
+        {
+          "name": "Create payment link",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chain\": \"base\",\n  \"token\": \"USDC\",\n  \"amount\": 2500,\n  \"description\": \"Coffee\",\n  \"successUrl\": \"https://yourapp.com/thanks\"\n}"
+            },
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/payment_links",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "payment_links"]
+            },
+            "description": "Mints a REUSABLE `/pay/<token>` link that spawns a fresh checkout per buyer. Supply exactly ONE amount source: `amount` (a fixed ad-hoc amount in minor units / cents) | `priceId` (a saved one-time price) | `openAmount: true` (the buyer names the amount on /pay, with optional `minAmount`/`maxAmount` clamps and `presetAmounts` quick-pick chips). `description` is required for a fixed amount or an open-amount link; `chain` + `token` are always required (the merchant's settlement rail). The response wraps as `{ \"paymentLink\": { … } }` — copy `paymentLink.id` into the `paymentLinkId` variable and `paymentLink.url` is the shareable link."
+          }
+        },
+        {
+          "name": "List payment links",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/payment_links",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "payment_links"]
+            }
+          }
+        },
+        {
+          "name": "Deactivate payment link",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/payment_links/{{paymentLinkId}}",
+              "host": ["{{apiOrigin}}"],
+              "path": ["v1", "workspaces", "{{workspaceId}}", "payment_links", "{{paymentLinkId}}"]
             }
           }
         }

@@ -8,8 +8,8 @@ writing any code.
 
 - `OpenSettle.postman_collection.json` — collection covering every public
   v1 endpoint, organized by resource (Me, Customers, Products,
-  Invoices, Checkouts, Subscriptions, Wallets, Payments, Webhook
-  Endpoints, Health). 50+ requests total.
+  Invoices, Checkouts, Payment Links, Subscriptions, Wallets, Payments,
+  Webhook Endpoints, Health). 50+ requests total.
 - `OpenSettle.postman_environment.json` — environment template with the
   variables you need: `apiKey`, `workspaceId`, `apiOrigin`. Fill them in
   for your workspace, save under a different name, and you're ready.
