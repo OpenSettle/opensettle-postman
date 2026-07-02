@@ -39,7 +39,7 @@ references them.
 ## Live spec
 
 The collection is hand-curated to stay readable; the canonical machine
-description of every endpoint is the OpenAPI 3.1 spec at
+description of every endpoint is the OpenAPI 3.0 spec at
 [`/v1/openapi.json`](https://api.opensettle.io/v1/openapi.json), also
 published at [OpenSettle/opensettle-openapi](https://github.com/OpenSettle/opensettle-openapi).
 If the collection lags behind a new endpoint, the spec is the source of
