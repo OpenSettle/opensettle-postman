@@ -338,7 +338,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"mode\": \"payment\",\n  \"customerId\": \"{{customerId}}\",\n  \"invoiceId\": \"{{invoiceId}}\",\n  \"successUrl\": \"https://yourapp.com/payments/success\",\n  \"cancelUrl\": \"https://yourapp.com/payments/cancel\"\n}"
+              "raw": "{\n  \"mode\": \"payment\",\n  \"amount\": 4999,\n  \"currency\": \"USD\",\n  \"chain\": \"base\",\n  \"token\": \"USDC\",\n  \"successUrl\": \"https://yourapp.com/payments/success\",\n  \"cancelUrl\": \"https://yourapp.com/payments/cancel\"\n}"
             },
             "url": {
               "raw": "{{apiOrigin}}/v1/workspaces/{{workspaceId}}/checkouts",
